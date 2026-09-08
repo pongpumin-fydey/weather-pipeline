@@ -8,6 +8,8 @@ from psycopg2.extras import execute_batch
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+from zoneinfo import ZoneInfo
+from datetime import datetime
 
 # ตั้งค่า Logging ตาม Requirement
 logging.basicConfig(
@@ -117,6 +119,7 @@ def run_pipeline():
                 # 2. โหลดลงตาราง Fact (ถ้าเจอ Composite Key ซ้ำ ให้ทำ UPDATE ทับ ไม่เพิ่มแถวใหม่)
                 upsert_query = """
                     INSERT INTO fact_weather_forecast 
+                    forecast_time = datetime.fromisoformat(t).replace(tzinfo=ZoneInfo("Asia/Bangkok"))
                     (city_id, forecast_time, temperature_celsius, rain_chance_pct, precipitation_mm, updated_at)
                     VALUES (%s, %s, %s, %s, %s, %s)
                     ON CONFLICT (city_id, forecast_time) 
