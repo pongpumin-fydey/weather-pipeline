@@ -11,19 +11,9 @@ st.set_page_config(
 st.title("⛅ 7-Day Weather Forecast Dashboard")
 st.caption("Data source: PostgreSQL Database (weather_db) | Ingested via Open-Meteo API")
 
-import os
-from dotenv import load_dotenv
 
-# โหลดค่าจากไฟล์ .env
-load_dotenv()
 
-DB_CONFIG = {
-    "dbname": os.getenv("DB_NAME", "weather_db"),
-    "user": os.getenv("DB_USER", "postgres"),
-    "password": os.getenv("DB_PASSWORD"),
-    "host": os.getenv("DB_HOST", "localhost"),
-    "port": os.getenv("DB_PORT", 5432)
-}
+from config import DB_CONFIG
 
 @st.cache_data(ttl=600)
 def load_forecast_data():
