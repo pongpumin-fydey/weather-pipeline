@@ -99,9 +99,10 @@ def run_pipeline():
 
             transformed_records = []
             for t, temp, rain, precip in zip(times, temps, rain_chances, precips):
+                forecast_time = datetime.fromisoformat(t).replace(tzinfo=ZoneInfo("Asia/Bangkok"))
                 transformed_records.append((
                     city_id,
-                    t,
+                    forecast_time,
                     temp,
                     rain,
                     precip,
@@ -119,7 +120,6 @@ def run_pipeline():
                 # 2. โหลดลงตาราง Fact (ถ้าเจอ Composite Key ซ้ำ ให้ทำ UPDATE ทับ ไม่เพิ่มแถวใหม่)
                 upsert_query = """
                     INSERT INTO fact_weather_forecast 
-                    forecast_time = datetime.fromisoformat(t).replace(tzinfo=ZoneInfo("Asia/Bangkok"))
                     (city_id, forecast_time, temperature_celsius, rain_chance_pct, precipitation_mm, updated_at)
                     VALUES (%s, %s, %s, %s, %s, %s)
                     ON CONFLICT (city_id, forecast_time) 

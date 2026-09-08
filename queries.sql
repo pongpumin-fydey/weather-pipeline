@@ -10,7 +10,7 @@ JOIN dim_cities c ON f.city_id = c.city_id
 GROUP BY c.city_name, DATE(f.forecast_time)
 ORDER BY c.city_name, forecast_date;
 
-#เมืองที่มีช่วงอุณหภูมิแกว่งกว้างที่สุด (Max − Min) ในรอบ 7 วัน#
+--เมืองที่มีช่วงอุณหภูมิแกว่งกว้างที่สุด (Max − Min) ในรอบ 7 วัน#
 SELECT 
     c.city_name,
     MIN(f.temperature_celsius) AS min_temp,
@@ -22,7 +22,7 @@ GROUP BY c.city_name
 ORDER BY temp_range DESC
 LIMIT 1;
 
-#ชั่วโมงที่มีโอกาสเกิดฝนตกสูงที่สุดในแต่ละวัน แยกตามเมือง#
+--ชั่วโมงที่มีโอกาสเกิดฝนตกสูงที่สุดในแต่ละวัน แยกตามเมือง#
 WITH ranked_hourly_rain AS (
     SELECT 
         c.city_name,
@@ -45,7 +45,7 @@ FROM ranked_hourly_rain
 WHERE rank_order = 1
 ORDER BY city_name, forecast_date;
 
-#ผลต่างของอุณหภูมิเฉลี่ยเมื่อเทียบกับวันก่อนหน้า (Day-over-Day Difference)#
+--ผลต่างของอุณหภูมิเฉลี่ยเมื่อเทียบกับวันก่อนหน้า (Day-over-Day Difference)#
 WITH daily_city_avg AS (
     SELECT 
         c.city_name,
