@@ -3,13 +3,14 @@ import logging
 import os
 import time
 from datetime import datetime
+from zoneinfo import ZoneInfo
 import psycopg2
 from psycopg2.extras import execute_batch
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
-from zoneinfo import ZoneInfo
-from datetime import datetime
+
+
 
 # ตั้งค่า Logging ตาม Requirement
 logging.basicConfig(
@@ -27,14 +28,7 @@ CITIES = [
     {"city_id": "HDY", "name": "Hat Yai", "lat": 7.0084, "lon": 100.4747},
 ]
 
-# 2. ข้อมูลเชื่อมต่อ PostgreSQL (ตรวจสอบรหัสผ่านให้ตรงกับที่ตั้งไว้)
-DB_CONFIG = {
-    "dbname": "weather_db",
-    "user": "postgres",
-    "password": "b2545.",  # เปลี่ยนเป็นรหัสผ่านที่คุณตั้งไว้ตอนติดตั้ง
-    "host": "localhost",
-    "port": 5432
-}
+from config import DB_CONFIG
 
 def get_resilient_session() -> requests.Session:
     """สร้าง Session พร้อมระบบ Exponential Backoff Retry จัดการ API หลุด/Timeout"""
@@ -81,11 +75,11 @@ def run_pipeline():
     for city in CITIES:
         city_id = city["city_id"]
         try:
-            # Step A: ดึงข้อมูลสดจาก Open-Meteo API
+            # Step A: ดึงข้อมูลจาก Open-Meteo API
             data = fetch_weather_data(session, city["lat"], city["lon"])
             
             # Step B: เก็บ Raw JSON สำรองไว้ในเครื่อง (Data Lake Landing)
-            timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
+            timestamp_str = datetime.now(ZoneInfo("Asia/Bangkok")).strftime("%Y%m%d_%H%M%S")
             raw_path = f"{raw_dir}/{city_id}_{timestamp_str}.json"
             with open(raw_path, "w", encoding="utf-8") as f:
                 json.dump(data, f)
@@ -106,7 +100,7 @@ def run_pipeline():
                     temp,
                     rain,
                     precip,
-                    datetime.now()
+                    datetime.now(ZoneInfo("Asia/Bangkok"))
                 ))
 
             # Step D: โหลดข้อมูลลง Database (Atomic Transaction + Idempotent Upsert)
