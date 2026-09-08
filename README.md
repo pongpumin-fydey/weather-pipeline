@@ -8,6 +8,7 @@ An end-to-end data pipeline built for the OOCA Data Engineer Internship assessme
 
 ![Dashboard Overview](<Weather Data Pipeline Dashboard 1.png>)
 ![Dashboard Details](<Weather Data Pipeline Dashboard 2.png>)
+
 ---
 
 ## 🏗️ Architecture & Schema Design
@@ -67,7 +68,7 @@ If this pipeline runs hourly in production, the following architectural upgrades
 
 ## 🤖 AI Tools Disclosure
 
-AI assistance (Gemini / ClAUDE) was utilized for:
+AI assistance (Gemini / Claude) was utilized for:
 * Reviewing ANSI SQL Window Function syntax (`ROW_NUMBER`, `LAG`).
 * Designing standard Python retry configurations with `urllib3`.
 * All business logic, architectural trade-offs, SQL transformations, and pipeline execution were verified, debugged, and explained by the candidate.
@@ -86,7 +87,15 @@ Create database `weather_db` in PostgreSQL and run `schema.sql`:
 psql -U postgres -d weather_db -f schema.sql
 
 
-Install Dependencies & Run Ingestion
+3. Setup Environment Variables
+
+Create a `.env` file in the root directory based on the provided `.env.example` and fill in your PostgreSQL credentials:
+```bash
+cp .env.example .env
+
+
+
+4.Install Dependencies & Run Ingestion
 
 python -m venv venv
 .\venv\Scripts\Activate.ps1   # On Windows
@@ -94,5 +103,5 @@ pip install -r requirements.txt
 python pipeline.py
 
 
-Run Dashboard
+5.Run Dashboard
 streamlit run app.py
