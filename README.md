@@ -45,6 +45,8 @@ The pipeline is designed to be fully idempotent:
 * **Timezone Consistency:** Requested data with explicit `timezone=Asia/Bangkok` (+07:00) and stored timestamps as `TIMESTAMP WITH TIME ZONE` (`TIMESTAMPTZ`), preventing UTC-shift errors during day-level aggregations.
 * **Transient API Failures:** Implemented Exponential Backoff Retry via `requests.adapters.HTTPAdapter` (3 retries on HTTP 429, 500, 502, 503, 504).
 * **Null Handling:** Initial boundary days in Window functions (e.g., `LAG()`) produce expected `NULL` values for previous-day comparisons, handled naturally without breaking the schema.
+* **Units:** Open-Meteo returns temperature in Celsius and precipitation in millimeters by default, matching target regional standards; explicit column naming (`temperature_celsius`, `precipitation_mm`) prevents any ambiguity downstream.
+* **Data Gaps:** Handled potential missing fields or truncated payloads gracefully using safe dictionary lookups (`.get()`) and Python's `zip()` truncation behavior, preventing runtime `IndexError` crashes if hourly arrays return misaligned lengths.
 
 ---
 
