@@ -46,14 +46,14 @@ This document contains the execution results of the analytical queries defined i
 
 ---
 
-### Q2: --เมืองที่มีช่วงอุณหภูมิแกว่งกว้างที่สุด (Max − Min) ในรอบ 7 วัน (Which city has the widest temperature range (max − min) over the next 7 days)
+### Q2: เมืองที่มีช่วงอุณหภูมิแกว่งกว้างที่สุด (Max − Min) ในรอบ 7 วัน (Which city has the widest temperature range (max − min) over the next 7 days)
 | city_name | min_temp | max_temp | temperature_range |
 |:---|:---|:---|:---|
 | Chiang Mai | 21.80 | 33.30 | 11.50 |
 
 ---
 
-### Q3: --ชั่วโมงที่มีโอกาสเกิดฝนตกสูงที่สุดในแต่ละวัน แยกตามเมือง (The hour with the highest chance of rain per city, per day)
+### Q3: ชั่วโมงที่มีโอกาสเกิดฝนตกสูงที่สุดในแต่ละวัน แยกตามเมือง (The hour with the highest chance of rain per city, per day)
 | city_name | forecast_date | peak_rain_hour | rain_chance_pct |
 |:---|:---|:---|:---|
 | Bangkok | 2026-09-09 | 2026-09-09 16:00:00+07 | 100 |
@@ -94,7 +94,7 @@ This document contains the execution results of the analytical queries defined i
 
 ---
 
-### Q4: --ผลต่างของอุณหภูมิเฉลี่ยเมื่อเทียบกับวันก่อนหน้า (Difference in daily average temperature compared to the previous day)
+### Q4: ผลต่างของอุณหภูมิเฉลี่ยเมื่อเทียบกับวันก่อนหน้า (Difference in daily average temperature compared to the previous day)
 | city_name | forecast_date | avg_temp | prev_day_avg_temp | temp_diff |
 |:---|:---|:---|:---|:---|
 | Bangkok | 2026-09-09 | 27.54 | NULL | NULL |

@@ -72,3 +72,4 @@ try:
 
 except Exception as e:
     st.error(f"ไม่สามารถเชื่อมต่อ Database ได้: {e}")
+    
