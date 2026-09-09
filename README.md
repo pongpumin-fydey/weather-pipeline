@@ -78,9 +78,9 @@ If this pipeline runs hourly in production, the following architectural upgrades
 ## 🤖 AI Tools Disclosure
 
 AI assistance (Gemini / Claude) was utilized for:
+* Assisting in the development of business logic, SQL transformations, and pipeline operations.
 * Reviewing ANSI SQL Window Function syntax (`ROW_NUMBER`, `LAG`).
 * Designing standard Python retry configurations with `urllib3`.
-* I personally verified, tested, and understand all business logic, SQL transformations, and pipeline operations.
 
 ---
 
