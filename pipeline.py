@@ -12,14 +12,14 @@ from urllib3.util.retry import Retry
 
 
 
-# ตั้งค่า Logging ตาม Requirement
+# ตั้งค่าระบบ Logging
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
     handlers=[logging.StreamHandler()]
 )
 
-# 1. พิกัด 5 เมืองตามที่โจทย์กำหนด
+# 1. รายชื่อและพิกัด 5 เมืองเป้าหมาย
 CITIES = [
     {"city_id": "BKK", "name": "Bangkok", "lat": 13.7563, "lon": 100.5018},
     {"city_id": "CNX", "name": "Chiang Mai", "lat": 18.7883, "lon": 98.9853},
@@ -142,7 +142,7 @@ def run_pipeline():
     conn.close()
     elapsed_time = round(time.time() - start_time, 2)
     
-    # พิมพ์สรุปผลการทำงานตามเงื่อนไข Assessment
+    # สรุปผลการทำงานของ Pipeline (Execution Summary)
     logging.info("=" * 45)
     logging.info(f"Execution completed in: {elapsed_time}s")
     logging.info(f"Cities Processed: {cities_processed}/{len(CITIES)}")

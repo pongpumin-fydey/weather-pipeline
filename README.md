@@ -25,19 +25,25 @@ The database schema follows an **ELT / Medallion pattern** using PostgreSQL:
 
 ## 🔁 Idempotency Strategy
 
-The pipeline is designed to be fully idempotent:
+The pipeline is designed to ensure data consistency across multiple runs:
 
-* **Conflict Resolution:** Ingestion uses the PostgreSQL clause:
+* **Conflict Resolution (Gold Layer):** Ingestion into `fact_weather_forecast` uses PostgreSQL upsert:
   ```sql
   INSERT INTO fact_weather_forecast (...) VALUES (...)
   ON CONFLICT (city_id, forecast_time)
-  DO UPDATE SET ...;
-```
+  DO UPDATE SET
+      temperature_celsius = EXCLUDED.temperature_celsius,
+      rain_chance_pct = EXCLUDED.rain_chance_pct,
+      precipitation_mm = EXCLUDED.precipitation_mm,
+      updated_at = EXCLUDED.updated_at;
+  ```
+  Running the pipeline repeatedly will refresh existing hourly records rather than inflating the row count.
 
+* **Immutable Audit Trail (Bronze Layer):** 
+The `raw_weather_payloads` table intentionally operates as append-only to preserve a historical audit log of every ingestion run.
 
-
-  * **Atomic Transactions:** Database operations are wrapped inside a transaction block (`commit`/`rollback`). If an error occurs midway, partial data is rolled back cleanly.
-
+* **Atomic Transactions:** 
+Ingestion steps are wrapped in transactional blocks (`commit`/`rollback`). If a failure occurs mid-batch, changes are rolled back cleanly to prevent partial loads.
 ---
 
 ## 🛠️ Data Quality & Handling Edge Cases
@@ -65,7 +71,7 @@ If this pipeline runs hourly in production, the following architectural upgrades
 ## 💡 Interesting Insights from Data
 
 1. **Diurnal Temperature Variation:** Inland and northern cities (e.g., Chiang Mai, Khon Kaen) exhibit a significantly wider day-night temperature range compared to coastal cities (e.g., Phuket), where maritime air keeps temperatures stable.
-2. **Precipitation Patterns:** Highest rain probabilities cluster during afternoon and early evening hours, consistent with tropical convective precipitation dynamics.
+2. **Precipitation Patterns:** Rain probability peaks during late afternoon and early evening (around 2:00 PM – 7:00 PM), consistent with typical tropical afternoon showers driven by daytime surface heating.
 
 ---
 
@@ -74,7 +80,7 @@ If this pipeline runs hourly in production, the following architectural upgrades
 AI assistance (Gemini / Claude) was utilized for:
 * Reviewing ANSI SQL Window Function syntax (`ROW_NUMBER`, `LAG`).
 * Designing standard Python retry configurations with `urllib3`.
-* All business logic, architectural trade-offs, SQL transformations, and pipeline execution were verified, debugged, and explained by the candidate.
+* I personally verified, tested, and understand all business logic, SQL transformations, and pipeline operations.
 
 ---
 
