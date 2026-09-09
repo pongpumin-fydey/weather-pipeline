@@ -56,6 +56,7 @@ If this pipeline runs hourly in production, the following architectural upgrades
 2. **Orchestration:** Transition from standalone Python scripts to an orchestrator like **Apache Airflow** or **Prefect** for DAG scheduling, retry policies, and alerting.
 3. **Object Storage Data Lake:** Offload raw JSON files to cloud object storage (AWS S3 / GCS) with lifecycle policies to keep database storage costs minimal.
 4. **Connection Pooling:** Use **PgBouncer** to manage concurrent client connections between ingestion workers and dashboard readers.
+5. **Data Retention Policy:** Implement a daily cleanup routine to remove stale historical forecasts (e.g., `DELETE FROM fact_weather_forecast WHERE forecast_time < CURRENT_DATE - INTERVAL '1 day';`) to prevent indefinite table growth and maintain query performance.
 
 ---
 

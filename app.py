@@ -31,7 +31,7 @@ def load_forecast_data():
     """
     df = pd.read_sql(query, conn)
     conn.close()
-    df["forecast_time"] = pd.to_datetime(df["forecast_time"])
+    df["forecast_time"] = pd.to_datetime(df["forecast_time"]).dt.tz_convert("Asia/Bangkok")
     return df
 
 try:
@@ -72,4 +72,3 @@ try:
 
 except Exception as e:
     st.error(f"ไม่สามารถเชื่อมต่อ Database ได้: {e}")
-    
