@@ -32,7 +32,7 @@ The pipeline is designed to be fully idempotent:
   INSERT INTO fact_weather_forecast (...) VALUES (...)
   ON CONFLICT (city_id, forecast_time)
   DO UPDATE SET ...;
-
+```
 
 
 
@@ -86,23 +86,25 @@ AI assistance (Gemini / Claude) was utilized for:
 Create database `weather_db` in PostgreSQL and run `schema.sql`:
 ```bash
 psql -U postgres -d weather_db -f schema.sql
+```
 
-
-3. Setup Environment Variables
-
+### 3. Setup Environment Variables
 Create a `.env` file in the root directory based on the provided `.env.example` and fill in your PostgreSQL credentials:
 ```bash
 cp .env.example .env
+```
 
 
-
-4.Install Dependencies & Run Ingestion
-
+### 4. Install Dependencies & Run Ingestion
+```bash
 python -m venv venv
 .\venv\Scripts\Activate.ps1   # On Windows
 pip install -r requirements.txt
 python pipeline.py
+```
 
 
-5.Run Dashboard
+### 5. Run Dashboard
+```bash
 streamlit run app.py
+```
